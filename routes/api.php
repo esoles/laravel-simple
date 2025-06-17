@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ServiceController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -19,3 +20,11 @@ Route::get('products', [ProductController::class, 'index']);
 Route::post('products', [ProductController::class, 'store']);
 Route::get('products/{id}', [ProductController::class, 'show']);
 Route::put('products/{id}', [ProductController::class, 'update']);
+
+Route::group(['prefix' => 'services'], function () {
+    Route::get('/', [ServiceController::class, 'index']);
+    Route::post('/', [ServiceController::class, 'store']);
+    Route::get('/{id}', [ServiceController::class, 'show']);
+    Route::put('/{id}', [ServiceController::class, 'update']);
+    Route::delete('/{id}', [ServiceController::class, 'destroy']);
+});

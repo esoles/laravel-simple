@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\StoredProcedureController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -28,3 +29,7 @@ Route::group(['prefix' => 'services'], function () {
     Route::put('/{id}', [ServiceController::class, 'update']);
     Route::delete('/{id}', [ServiceController::class, 'destroy']);
 });
+
+Route::get('/sp/categories/{catId}/products', [StoredProcedureController::class, 'showCategoryProducts']);
+Route::get('/sp/categories/{name}', [StoredProcedureController::class, 'showCategoryByName']);
+Route::put('/sp/products/{productId}/price', [StoredProcedureController::class, 'updateProductPriceSp']);

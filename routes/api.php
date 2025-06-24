@@ -33,3 +33,5 @@ Route::group(['prefix' => 'services'], function () {
 Route::get('/sp/categories/{catId}/products', [StoredProcedureController::class, 'showCategoryProducts']);
 Route::get('/sp/categories/{name}', [StoredProcedureController::class, 'showCategoryByName']);
 Route::put('/sp/products/{productId}/price', [StoredProcedureController::class, 'updateProductPriceSp']);
+Route::GET('/sp/services', [StoredProcedureController::class, 'GETServicesSp']);
+Route::post('/sp/services', [StoredProcedureController::class, 'createServicesSp']);

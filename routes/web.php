@@ -1,10 +1,8 @@
 <?php
 
-use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\WebController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::resource('categories', CategoryController::class);
+Route::get('/', [WebController::class, 'index']);
+Route::get('/products/{category}', [WebController::class, 'products'])->name('products');
+Route::get('/services/{category}', [WebController::class, 'services'])->name('services');

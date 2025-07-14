@@ -13,7 +13,9 @@ class Category extends Model
     // Los campos 'name' y 'description' pueden ser asignados masivamente.
     protected $fillable = [
         'name',
-        'description'
+        'description',
+        'position',
+        'status'
     ];
 
     // Por defecto, Laravel maneja automáticamente 'created_at' y 'updated_at'.
@@ -22,4 +24,7 @@ class Category extends Model
         return $this->hasMany(Product::class);
     }
 
+    public function services(){
+        return $this->hasMany(Service::class);
+    }
 }

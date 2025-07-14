@@ -14,7 +14,7 @@ class ProductController extends Controller
         try {
             $products = Product::with('category')->get();
             return response()->json([
-                'message' => 'Productos recuperados correptamente',
+                'message' => 'Productos recuperados correctamente',
                 'data' => $products
             ], Response::HTTP_OK);
         } catch (\Exception $e) {
@@ -32,6 +32,8 @@ class ProductController extends Controller
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'category_id' => 'required|exists:categories,id',
+            'position' => 'nullable|integer',
+            'status' => 'required|in:enabled,disabled'
         ]);
 
         if ($validator->fails()) {
@@ -92,6 +94,8 @@ class ProductController extends Controller
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'category_id' => 'required|exists:categories,id',
+            'position' => 'nullable|integer',
+            'status' => 'required|in:enabled,disabled'
         ]);
 
         if ($validator->fails()) {
@@ -110,6 +114,28 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error al actualizar producto',
+                'error' => $e->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function destroy(string $id)
+    {
+        try {
+            $product = Product::find($id);
+
+            if (!$product) {
+                return response()->json([
+                    'message' => 'Producto no encontrada'
+                ], Response::HTTP_NOT_FOUND);
+            }
+
+            $product->delete();
+
+            return response()->json(null, Response::HTTP_NO_CONTENT);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error al eliminar producto',
                 'error' => $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }

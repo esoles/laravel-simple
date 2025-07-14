@@ -11,16 +11,21 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get('categories', [CategoryController::class, 'index']);
-Route::post('categories', [CategoryController::class, 'store']);
-Route::get('categories/{id}', [CategoryController::class, 'show']);
-Route::put('categories/{id}', [CategoryController::class, 'update']);
-Route::delete('categories/{id}', [CategoryController::class, 'destroy']);
+Route::group(['prefix' => 'categories'], function () {
+    Route::get('/', [CategoryController::class, 'index']);
+    Route::post('/', [CategoryController::class, 'store']);
+    Route::get('/{id}', [CategoryController::class, 'show']);
+    Route::put('/{id}', [CategoryController::class, 'update']);
+    Route::delete('/{id}', [CategoryController::class, 'destroy']);
+});
 
-Route::get('products', [ProductController::class, 'index']);
-Route::post('products', [ProductController::class, 'store']);
-Route::get('products/{id}', [ProductController::class, 'show']);
-Route::put('products/{id}', [ProductController::class, 'update']);
+Route::group(['prefix' => 'products'], function () {
+    Route::get('/', [ProductController::class, 'index']);
+    Route::post('/', [ProductController::class, 'store']);
+    Route::get('/{id}', [ProductController::class, 'show']);
+    Route::put('/{id}', [ProductController::class, 'update']);
+    Route::delete('/{id}', [ProductController::class, 'destroy']);
+});
 
 Route::group(['prefix' => 'services'], function () {
     Route::get('/', [ServiceController::class, 'index']);
@@ -30,8 +35,10 @@ Route::group(['prefix' => 'services'], function () {
     Route::delete('/{id}', [ServiceController::class, 'destroy']);
 });
 
-Route::get('/sp/categories/{catId}/products', [StoredProcedureController::class, 'showCategoryProducts']);
-Route::get('/sp/categories/{name}', [StoredProcedureController::class, 'showCategoryByName']);
-Route::put('/sp/products/{productId}/price', [StoredProcedureController::class, 'updateProductPriceSp']);
-Route::GET('/sp/services', [StoredProcedureController::class, 'GETServicesSp']);
-Route::post('/sp/services', [StoredProcedureController::class, 'createServicesSp']);
+Route::group(['prefix' => 'sp'], function () {
+    Route::get('/categories/{catId}/products', [StoredProcedureController::class, 'showCategoryProducts']);
+    Route::get('/categories/{name}', [StoredProcedureController::class, 'showCategoryByName']);
+    Route::put('/products/{productId}/price', [StoredProcedureController::class, 'updateProductPriceSp']);
+    Route::GET('/services', [StoredProcedureController::class, 'GETServicesSp']);
+    Route::post('/services', [StoredProcedureController::class, 'createServicesSp']);
+});

@@ -49,6 +49,8 @@ class CategoryController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:categories,name', // 'required' para el nombre, único en la tabla 'categories'
             'description' => 'nullable|string', // 'description' es opcional y debe ser una cadena
+            'position' => 'nullable|integer',
+            'status' => 'required|in:enabled,disabled'
         ]);
 
         // Si la validación falla, devolver un error JSON
@@ -134,6 +136,8 @@ class CategoryController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:categories,name,' . $id,
             'description' => 'nullable|string',
+            'position' => 'nullable|integer',
+            'status' => 'required|in:enabled,disabled'
         ]);
 
         // Si la validación falla, devolver un error JSON

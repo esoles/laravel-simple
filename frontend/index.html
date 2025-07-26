@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de categorías y servicios</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f3f4f6;
+            color: #374151;
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2.25rem;
+            font-weight: bold;
+            text-align: center;
+            color: #4f46e5;
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #4338ca;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #e0e7ff;
+            padding-bottom: 0.5rem;
+        }
+
+        .container-section {
+            background-color: #f9fafb;
+            padding: 1.5rem;
+            border-radius: 6px;
+            margin-bottom: 2rem;
+            border: 1px solid #e5e7eb;
+        }
+
+        .form-group div {
+            margin-bottom: .8rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #1f2937;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            color: #374151;
+        }
+
+        .form-group textarea {
+            resize: none;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #4f46e5;
+            outline: none;
+            box-shadow: 0 0 0 2px #4f46e5;
+        }
+
+        .form-group button {
+            background-color: #4f46e5;
+            color: white;
+            padding: 0.4rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.2s ease-in-out;
+            margin-right: 0.5rem;
+        }
+
+        .form-group button:hover {
+            background-color: #4338ca;
+        }
+
+        .form-group button.cancel-btn {
+            background-color: #ef4444;
+        }
+
+        .form-group button.cancel-btn:hover {
+            background-color: #dc2626;
+        }
+
+        .message-box {
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 4px;
+            display: none;
+            font-weight: 500;
+        }
+
+        .message-box p {
+            margin: 0;
+            padding: 0;
+        }
+
+        .message-box ul {
+            margin-top: 0.5rem;
+            margin-bottom: 0;
+            padding-left: 20px;
+            list-style-type: disc;
+        }
+
+        .message-box li {
+            margin-bottom: 0.25rem;
+        }
+
+        .message-box.success {
+            color: #155724;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message-box.error {
+            color: #721c24;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+        }
+
+        .list-item {
+            background-color: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .list-item strong {
+            color: #1f2937;
+        }
+
+        .list-item .actions button {
+            padding: 0.2rem 0.4rem;
+            font-size: 0.875rem;
+            margin-left: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        .list-item .actions button.edit-btn {
+            background-color: #f59e0b;
+            color: white;
+            border: none;
+        }
+
+        .list-item .actions button.edit-btn:hover {
+            background-color: #d97706;
+        }
+
+        .list-item .actions button.delete-btn {
+            background-color: #ef4444;
+            color: white;
+            border: none;
+        }
+
+        .list-item .actions button.delete-btn:hover {
+            background-color: #dc2626;
+        }
+
+        .required {
+            color: #ef4444;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col md:flex-row gap-4">
+    <div class="container flex-1 p-4">
+        <h1>Gestión de categorías</h1>
+
+        <div class="container-section">
+            <h2>Formulario de categorías</h2>
+            <form id="category-form" class="form-group">
+                <input type="hidden" id="category-id">
+                <div>
+                    <label for="category-name">Nombre: <span class="required">*</span></label>
+                    <input type="text" id="category-name" name="name" required>
+                </div>
+                <div>
+                    <label for="category-description">Descripción:</label>
+                    <textarea id="category-description" name="description" rows="3"></textarea>
+                </div>
+                <div>
+                    <label for="category-position">Posición:</label>
+                    <input type="number" min="0" id="category-position" name="position">
+                </div>
+                <div>
+                    <label for="category-status">Estado: <span class="required">*</span></label>
+                    <select name="category-status" id="category-status">
+                        <option value="enabled">Activo</option>
+                        <option value="disabled">Inactivo</option>
+                    </select>
+                </div>
+                <button type="submit" id="category-submit-btn">Registrar categoría</button>
+                <button type="button" id="category-cancel-btn" class="cancel-btn" style="display:none;">Cancelar
+                    edición</button>
+                <div id="category-message" class="message-box"></div>
+            </form>
+        </div>
+
+        <div class="container-section">
+            <h2>Listado de categorías</h2>
+            <div class="bg-white shadow-md rounded-lg overflow-x-auto w-full">
+                <div class="min-w-[500px] grid grid-cols-5 gap-4 bg-[#0074FF] p-4 font-semibold text-white">
+                    <div>Nombre</div>
+                    <div>Descripción</div>
+                    <div>Posición</div>
+                    <div>Estado</div>
+                    <div>Acción</div>
+                </div>
+                <div id="categories-container" class="min-w-[500px]">
+                    <p class="flex items-center"><img src="/frontend/loading.gif" width="30" /> &nbsp;Cargando categorías</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container flex-1 p-4">
+        <h1>Gestión de servicios</h1>
+        <div class="container-section">
+            <h2>Formulario de servicios</h2>
+            <form id="service-form" class="form-group">
+                <input type="hidden" id="service-id">
+                <div>
+                    <label for="service-category">Categoría: <span class="required">*</span></label>
+                    <select id="service-category" name="category_id" required>
+                        <option value="">Cargando categorías...</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="service-name">Nombre: <span class="required">*</span></label>
+                    <input type="text" id="service-name" name="name" required>
+                </div>
+                <div>
+                    <label for="service-description">Descripción:</label>
+                    <textarea id="service-description" name="description" rows="3"></textarea>
+                </div>
+                <div>
+                    <label for="service-price">Precio: <span class="required">*</span></label>
+                    <input type="number" id="service-price" name="price" step="0.01" required>
+                </div>
+
+                <div>
+                    <label for="service-position">Posición: <span class="required">*</span></label>
+                    <input type="number" min="0" id="service-position" name="position" required>
+                </div>
+
+                <div>
+                    <label for="service-duration">Duración:</label>
+                    <input type="text" id="service-duration" name="duration">
+                </div>
+                <div>
+                    <label for="service-status">Estado: <span class="required">*</span></label>
+                    <select name="service-status" id="service-status">
+                        <option value="enabled">Activo</option>
+                        <option value="disabled">Inactivo</option>
+                    </select>
+                </div>
+                <button type="submit" id="service-submit-btn">Registrar servicio</button>
+                <button type="button" id="service-cancel-btn" class="cancel-btn" style="display:none;">Cancelar edición</button>
+                <div id="service-message" class="message-box"></div>
+            </form>
+        </div>
+
+        <div class="container-section">
+            <h2>Listado de servicios</h2>
+            <div class="bg-white shadow-md rounded-lg overflow-x-auto w-full">
+                <div class="min-w-[600px] grid grid-cols-7 gap-4 bg-[#0074FF] p-4 font-semibold text-white">
+                    <div>Nombre</div>
+                    <div>Descripción</div>
+                    <div>Precio</div>
+                    <div>Duración</div>
+                    <div>Posición</div>
+                    <div>Estado</div>
+                    <div>Acción</div>
+                </div>
+                <div id="services-container" class="min-w-[600px]">
+                    <p class="flex items-center"><img src="/frontend/loading.gif" width="30" /> &nbsp;Cargando servicios
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
